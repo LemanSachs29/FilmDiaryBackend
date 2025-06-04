@@ -1,15 +1,13 @@
 package com.filmdiary.backend.api.entity;
 
 import java.sql.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,36 +15,32 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-//@Table(name = "\"USUARIO\"")
-@Table(name = "usuario")
+@Table(name = "pelicula")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioEntity {
+public class PeliculaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
+    @Column(name = "id_pelicula")
+    @NotNull
     private Long id;
 
-    private String nombre;
+    @Column(name = "id_tmdb")
+    @NotNull
+    private String idTmdb;
 
-    private String apellido;
+    private String titulo;
 
-    private String username;
-    
-    private String password;
+    @Column(name = "release_date")
+    @NotNull
+    private Date releaseDate;
 
-    private String email;
-    
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "poster_url")
+    @NotNull
+    private String posterUrl;
 
-    @Column(name = "fecha_nac")
-    private Date fechaNac;
-
-    @Column(name = "fecha_alta")
-    private Date fechaAlta;
 }

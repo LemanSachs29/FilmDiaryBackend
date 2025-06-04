@@ -5,8 +5,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.filmdiary.backend.api.dto.AuthRequest;
-import com.filmdiary.backend.api.dto.AuthResponse;
+import com.filmdiary.backend.api.dto.AuthRequestDto;
+import com.filmdiary.backend.api.dto.AuthResponseDto;
 import com.filmdiary.backend.api.entity.Role;
 import com.filmdiary.backend.api.entity.UsuarioEntity;
 import com.filmdiary.backend.api.repository.UsuarioRepository;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j  // Para logs
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authManager;
@@ -25,41 +25,29 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthResponse login(AuthRequest request) {
-        log.info("Intento de login para email: {}", request.getEmail());
+    public AuthResponseDto login(AuthRequestDto request) {
+        log.info("Login attempt for: {}", request.getEmail());
         
-        try {
-            // Verificar que el usuario existe
-            UsuarioEntity user = usuarioRepo.findByEmail(request.getEmail())
-                    .orElseThrow(() -> {
-                        log.error("Usuario no encontrado: {}", request.getEmail());
-                        return new RuntimeException("Usuario no encontrado");
-                    });
-            
-            log.info("Usuario encontrado: {}", user.getEmail());
-            
-            // Intentar autenticación
-            authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    request.getEmail(),
-                    request.getPassword()
-                )
-            );
-            
-            log.info("Autenticación exitosa para: {}", request.getEmail());
-            
-            String token = jwtUtil.generateToken(user);
-            
-            return new AuthResponse(token);
-            
-        } catch (Exception e) {
-            log.error("Error en login: {}", e.getMessage());
-            throw e;
-        }
+        // Verificar que el usuario existe
+        UsuarioEntity user = usuarioRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        // Autenticar
+        authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getPassword()
+            )
+        );
+        
+        log.info("Successful login: {}", request.getEmail());
+        
+        String token = jwtUtil.generateToken(user);
+        return new AuthResponseDto(token);
     }
 
-    public AuthResponse register(AuthRequest request) {
-        log.info("Intento de registro para email: {}", request.getEmail());
+    public AuthResponseDto register(AuthRequestDto request) {
+        log.info("Registration attempt for: {}", request.getEmail());
         
         if (usuarioRepo.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("El usuario ya existe");
@@ -83,11 +71,11 @@ public class AuthService {
         }
         
         UsuarioEntity nuevoUsuario = builder.build();
-
         usuarioRepo.save(nuevoUsuario);
-        log.info("Usuario registrado exitosamente: {}", nuevoUsuario.getEmail());
+        
+        log.info("User registered successfully: {}", nuevoUsuario.getEmail());
 
         String token = jwtUtil.generateToken(nuevoUsuario);
-        return new AuthResponse(token);
+        return new AuthResponseDto(token);
     }
 }
