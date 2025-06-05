@@ -31,11 +31,11 @@ public class UsuarioWatchlistEntity {
     private LocalDateTime fechaAgregado;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pelicula_id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_pelicula", insertable = false, updatable = false)
     private PeliculaEntity pelicula;
 
     @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
     private UsuarioEntity usuario;
 
 }

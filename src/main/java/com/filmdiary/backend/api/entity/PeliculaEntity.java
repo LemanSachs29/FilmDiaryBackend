@@ -36,7 +36,6 @@ public class PeliculaEntity {
     private String titulo;
 
     @Column(name = "release_date")
-    @NotNull
     private LocalDate releaseDate;
 
     @Column(name = "poster_url")

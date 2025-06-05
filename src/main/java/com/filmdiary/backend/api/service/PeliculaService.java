@@ -24,7 +24,7 @@ public class PeliculaService {
      */
     public Optional<PeliculaEntity> findByTmdbId(Long tmdbId) {
         log.debug("Buscando película con TMDB ID: {}", tmdbId);
-        return peliculaRepository.findByIdTmdb(tmdbId.toString());
+        return peliculaRepository.findByIdTmdb(tmdbId);
     }
 
     /**
@@ -52,6 +52,6 @@ public class PeliculaService {
      * @return true si existe, false si no
      */
     public boolean existsByTmdbId(Long tmdbId) {
-        return peliculaRepository.findByIdTmdb(tmdbId.toString()).isPresent();
+        return peliculaRepository.findByIdTmdb(tmdbId).isPresent();
     }
 }

@@ -49,6 +49,6 @@ public class UsuarioDiarioEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
-    private UsuarioDiarioEntity usuario;
+    private UsuarioEntity usuario;
 
 }

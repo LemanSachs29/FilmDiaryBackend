@@ -13,5 +13,5 @@ public interface PeliculaRepository extends JpaRepository<PeliculaEntity, Long>{
      * @param idTmdb El ID de la película en TMDB
      * @return Optional con la película si existe, vacío si no existe
      */
-    Optional<PeliculaEntity> findByIdTmdb(String idTmdb);
+    Optional<PeliculaEntity> findByIdTmdb(Long idTmdb);
 }
