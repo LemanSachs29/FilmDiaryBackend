@@ -1,5 +1,5 @@
 package com.filmdiary.backend.api.dto;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,6 @@ public class AuthRequestDto {
     private String email;
     private String nombre;
     private String apellido;
-    private Date fechaNac;
+    private LocalDate fechaNac;
 
 }

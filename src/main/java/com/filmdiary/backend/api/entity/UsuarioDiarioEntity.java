@@ -1,6 +1,5 @@
 package com.filmdiary.backend.api.entity;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -35,7 +34,8 @@ public class UsuarioDiarioEntity {
     @Column(name = "fecha_visionado")
     private LocalDateTime fechaVisionado;
 
-    private float puntuacion;
+    @Builder.Default
+    private float puntuacion = 0.0f;
 
     @Column(name = "id_usuario")
     private Long idUsuario;

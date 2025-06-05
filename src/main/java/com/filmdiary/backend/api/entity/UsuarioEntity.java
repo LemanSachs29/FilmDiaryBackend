@@ -1,6 +1,7 @@
 package com.filmdiary.backend.api.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,8 +46,8 @@ public class UsuarioEntity {
     private Role role;
 
     @Column(name = "fecha_nac")
-    private Date fechaNac;
+    private LocalDate fechaNac;
 
     @Column(name = "fecha_alta")
-    private Date fechaAlta;
+    private LocalDateTime fechaAlta;
 }

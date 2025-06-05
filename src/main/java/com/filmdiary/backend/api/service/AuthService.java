@@ -1,5 +1,8 @@
 package com.filmdiary.backend.api.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,7 +61,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .role(Role.USER)
-                .fechaAlta(new java.sql.Date(System.currentTimeMillis()));
+                .fechaAlta(LocalDateTime.now());
 
         if(request.getNombre() != null){
             builder.nombre(request.getNombre());

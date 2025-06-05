@@ -1,6 +1,6 @@
 package com.filmdiary.backend.api.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +37,7 @@ public class PeliculaEntity {
 
     @Column(name = "release_date")
     @NotNull
-    private Date releaseDate;
+    private LocalDate releaseDate;
 
     @Column(name = "poster_url")
     @NotNull
