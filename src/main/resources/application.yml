@@ -17,6 +17,10 @@ spring:
 server:
   port: 8080
 
+# Configuración de TMDB API
+tmdb:
+  api-key: ${TMDB_API_KEY:}
+
 # Configuración de logging
 logging:
   level:

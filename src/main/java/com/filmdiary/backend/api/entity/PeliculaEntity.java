@@ -31,7 +31,7 @@ public class PeliculaEntity {
 
     @Column(name = "id_tmdb")
     @NotNull
-    private String idTmdb;
+    private Long idTmdb;
 
     private String titulo;
 

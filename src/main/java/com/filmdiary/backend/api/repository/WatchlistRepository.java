@@ -15,8 +15,8 @@ public interface WatchlistRepository extends JpaRepository<UsuarioWatchlistEntit
     
     @Query("SELECT w FROM UsuarioWatchlistEntity w " +
            "JOIN FETCH w.pelicula " +
-           "WHERE w.id.usuarioId = :usuarioId " +
-           "ORDER BY w.fechaAnadido DESC")
+           "WHERE w.usuarioWatchlistEntityKey.idUsuario = :usuarioId " +
+           "ORDER BY w.fechaAgregado DESC")
     Page<UsuarioWatchlistEntity> findWatchlistWithMovies(@Param("usuarioId") Long usuarioId, Pageable pageable);
     
 }
