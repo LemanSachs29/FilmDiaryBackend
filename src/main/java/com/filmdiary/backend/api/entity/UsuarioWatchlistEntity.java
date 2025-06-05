@@ -1,5 +1,8 @@
 package com.filmdiary.backend.api.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -21,5 +24,7 @@ public class UsuarioWatchlistEntity {
     @EmbeddedId
     private UsuarioWatchlistEntityKey usuarioWatchlistEntityKey;
 
+    @Column(name = "fecha_agregado")
+    private LocalDateTime fechaAgregado;
 
 }
