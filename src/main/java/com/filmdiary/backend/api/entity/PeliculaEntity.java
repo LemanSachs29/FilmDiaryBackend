@@ -1,6 +1,9 @@
 package com.filmdiary.backend.api.entity;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,18 +24,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class PeliculaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pelicula")
-    @NotNull
     private Long id;
 
     @Column(name = "id_tmdb")
     @NotNull
     private Long idTmdb;
 
+    @NotNull
     private String titulo;
 
     @Column(name = "release_date")

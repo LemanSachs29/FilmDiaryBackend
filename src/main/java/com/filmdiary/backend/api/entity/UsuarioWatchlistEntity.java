@@ -2,6 +2,9 @@ package com.filmdiary.backend.api.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -22,6 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class UsuarioWatchlistEntity {
     
     @EmbeddedId
@@ -36,6 +40,7 @@ public class UsuarioWatchlistEntity {
 
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
+    @JsonIgnore
     private UsuarioEntity usuario;
 
 }
