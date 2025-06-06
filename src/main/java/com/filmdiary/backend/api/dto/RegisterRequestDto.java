@@ -16,7 +16,7 @@ public class RegisterRequestDto {
     
     @NotBlank(message = "La contraseña es obligatoria")
     @Pattern(
-        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[\\w@$!%*?&]{8,}$",
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\\d@$!%*?&]{8,}$",
         message = "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número"
     )
     private String password;
