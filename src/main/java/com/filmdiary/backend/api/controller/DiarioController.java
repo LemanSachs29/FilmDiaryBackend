@@ -46,21 +46,21 @@ public class DiarioController {
      * POST /api/diario/tmdb/{tmdbId}
      */
     @PostMapping("/tmdb/{tmdbId}")
-    public ResponseEntity<UsuarioDiarioEntity> addTmdbMovieToDiario(
+    public ResponseEntity<Void> addTmdbMovieToDiario(  // ← Cambiar de UsuarioDiarioEntity a Void
             @PathVariable Long tmdbId,
             @RequestParam Long usuarioId,
             @RequestParam(required = false) Float puntuacion,
             @RequestParam(required = false) LocalDate fechaVisionado) {
         
         log.info("Adding TMDB movie {} to diary for user {} with rating {}", 
-                 tmdbId, usuarioId, puntuacion);
+                tmdbId, usuarioId, puntuacion);
         
         // Usar MovieIntegrationService que maneja la lógica de obtener/crear película
-        UsuarioDiarioEntity entry = movieIntegrationService.addToDiario(
+        movieIntegrationService.addToDiario(  // ← Quitar la asignación a variable
             usuarioId, tmdbId, puntuacion, fechaVisionado);
         
         log.info("TMDB movie {} successfully added to diary for user {}", tmdbId, usuarioId);
-        return ResponseEntity.ok(entry);
+        return ResponseEntity.ok().build();  // ← Cambiar de ResponseEntity.ok(entry) a .build()
     }
 
     /**
