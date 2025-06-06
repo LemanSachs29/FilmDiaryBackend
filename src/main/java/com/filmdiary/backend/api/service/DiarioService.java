@@ -5,8 +5,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.filmdiary.backend.api.entity.UsuarioDiarioEntity;
 import com.filmdiary.backend.api.repository.DiarioRepository;
 
@@ -25,11 +27,11 @@ public class DiarioService {
         return diarioRepository.findDiarioWithMovies(usuarioId, pageable);
     }
 
-
     /**
      * Añade una nueva entrada al diario
      */
     public UsuarioDiarioEntity addToDiario(Long usuarioId, Long peliculaId, LocalDate fechaVisionado, float puntuacion) {
+        // 1. Crear y guardar la entrada
         UsuarioDiarioEntity diarioEntry = UsuarioDiarioEntity.builder()
                 .idUsuario(usuarioId)
                 .idPelicula(peliculaId)
@@ -37,7 +39,11 @@ public class DiarioService {
                 .puntuacion(puntuacion)
                 .build();
         
-        return diarioRepository.save(diarioEntry);
+        UsuarioDiarioEntity saved = diarioRepository.save(diarioEntry);
+        
+        // 2. CRUCIAL: Recargar la entrada con la relación de película
+        return diarioRepository.findDiarioEntryWithMovie(saved.getIdEntradaPelicula())
+                .orElse(saved); // Fallback si algo falla
     }
 
     /**
@@ -50,7 +56,11 @@ public class DiarioService {
         entry.setFechaVisionado(fechaVisionado);
         entry.setPuntuacion(puntuacion);
         
-        return diarioRepository.save(entry);
+        UsuarioDiarioEntity saved = diarioRepository.save(entry);
+        
+        // También recargar aquí para consistencia
+        return diarioRepository.findDiarioEntryWithMovie(saved.getIdEntradaPelicula())
+                .orElse(saved);
     }
 
     /**
@@ -68,7 +78,8 @@ public class DiarioService {
      * Obtiene una entrada específica del diario
      */
     public UsuarioDiarioEntity getDiarioEntry(Long entryId) {
-        return diarioRepository.findById(entryId)
+        // Usar query que incluye película
+        return diarioRepository.findDiarioEntryWithMovie(entryId)
                 .orElseThrow(() -> new RuntimeException("Entrada del diario no encontrada"));
     }
 }

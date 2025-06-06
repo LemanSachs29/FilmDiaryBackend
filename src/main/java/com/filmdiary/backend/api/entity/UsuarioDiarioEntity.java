@@ -47,7 +47,7 @@ public class UsuarioDiarioEntity {
     @Column(name = "id_pelicula")
     private Long idPelicula;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pelicula", insertable = false, updatable = false)
     private PeliculaEntity pelicula;
 
