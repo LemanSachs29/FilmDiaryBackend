@@ -27,5 +27,5 @@ public class RegisterRequestDto {
     
     private String nombre;
     private String apellido;
-    private LocalDate fechaNac;
+    private LocalDate fechaNac; 
 }

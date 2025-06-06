@@ -1,7 +1,6 @@
 package com.filmdiary.backend.api.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class MovieIntegrationService {
     /**
      * Añade una película de TMDB al diario del usuario
      */
-    public UsuarioDiarioEntity addToDiario(Long usuarioId, Long tmdbId, Float puntuacion, LocalDateTime fechaVisionado) {
+    public UsuarioDiarioEntity addToDiario(Long usuarioId, Long tmdbId, Float puntuacion, LocalDate fechaVisionado) {
         log.info("Adding movie {} to diary for user {} with rating {}", tmdbId, usuarioId, puntuacion);
         
         // 1. Obtener o crear la película en BD local
@@ -67,7 +66,7 @@ public class MovieIntegrationService {
         UsuarioDiarioEntity diarioEntry = diarioService.addToDiario(
             usuarioId, 
             pelicula.getId(), 
-            fechaVisionado != null ? fechaVisionado : LocalDateTime.now(), 
+            fechaVisionado != null ? fechaVisionado : LocalDate.now(), 
             puntuacion != null ? puntuacion : 0.0f
         );
         

@@ -4,11 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.filmdiary.backend.api.entity.UsuarioDiarioEntity;
 import com.filmdiary.backend.api.repository.DiarioRepository;
 
@@ -31,7 +29,7 @@ public class DiarioService {
     /**
      * Añade una nueva entrada al diario
      */
-    public UsuarioDiarioEntity addToDiario(Long usuarioId, Long peliculaId, LocalDateTime fechaVisionado, float puntuacion) {
+    public UsuarioDiarioEntity addToDiario(Long usuarioId, Long peliculaId, LocalDate fechaVisionado, float puntuacion) {
         UsuarioDiarioEntity diarioEntry = UsuarioDiarioEntity.builder()
                 .idUsuario(usuarioId)
                 .idPelicula(peliculaId)
@@ -45,7 +43,7 @@ public class DiarioService {
     /**
      * Actualiza una entrada del diario
      */
-    public UsuarioDiarioEntity updateDiarioEntry(Long entryId, LocalDateTime fechaVisionado, float puntuacion) {
+    public UsuarioDiarioEntity updateDiarioEntry(Long entryId, LocalDate fechaVisionado, float puntuacion) {
         UsuarioDiarioEntity entry = diarioRepository.findById(entryId)
                 .orElseThrow(() -> new RuntimeException("Entrada del diario no encontrada"));
         

@@ -1,6 +1,6 @@
 package com.filmdiary.backend.api.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,11 +32,11 @@ public class UsuarioDiarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_entrada_pelicula")
+    @Column(name = "id_entrada_diario")
     private Long idEntradaPelicula;
 
     @Column(name = "fecha_visionado")
-    private LocalDateTime fechaVisionado;
+    private LocalDate fechaVisionado;
 
     @Builder.Default
     private float puntuacion = 0.0f;
@@ -47,7 +47,7 @@ public class UsuarioDiarioEntity {
     @Column(name = "id_pelicula")
     private Long idPelicula;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_pelicula", insertable = false, updatable = false)
     private PeliculaEntity pelicula;
 

@@ -1,12 +1,10 @@
 package com.filmdiary.backend.api.controller;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.filmdiary.backend.api.entity.UsuarioDiarioEntity;
 import com.filmdiary.backend.api.service.DiarioService;
 import com.filmdiary.backend.api.service.MovieIntegrationService;
@@ -52,7 +50,7 @@ public class DiarioController {
             @PathVariable Long tmdbId,
             @RequestParam Long usuarioId,
             @RequestParam(required = false) Float puntuacion,
-            @RequestParam(required = false) LocalDateTime fechaVisionado) {
+            @RequestParam(required = false) LocalDate fechaVisionado) {
         
         log.info("Adding TMDB movie {} to diary for user {} with rating {}", 
                  tmdbId, usuarioId, puntuacion);
@@ -72,7 +70,7 @@ public class DiarioController {
     @PutMapping("/{entryId}")
     public ResponseEntity<UsuarioDiarioEntity> updateDiarioEntry(
             @PathVariable Long entryId,
-            @RequestParam(required = false) LocalDateTime fechaVisionado,
+            @RequestParam(required = false) LocalDate fechaVisionado,
             @RequestParam(required = false) Float puntuacion) {
         
         log.info("Updating diary entry {} with date: {} and rating: {}", 
@@ -82,7 +80,7 @@ public class DiarioController {
         UsuarioDiarioEntity currentEntry = diarioService.getDiarioEntry(entryId);
         
         // Usar valores actuales si no se proporcionan nuevos
-        LocalDateTime newFecha = fechaVisionado != null ? fechaVisionado : currentEntry.getFechaVisionado();
+        LocalDate newFecha = fechaVisionado != null ? fechaVisionado : currentEntry.getFechaVisionado();
         float newPuntuacion = puntuacion != null ? puntuacion : currentEntry.getPuntuacion();
         
         // Validar puntuación si se proporciona
