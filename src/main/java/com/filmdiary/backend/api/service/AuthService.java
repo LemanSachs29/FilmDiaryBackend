@@ -1,6 +1,5 @@
 package com.filmdiary.backend.api.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.security.authentication.AuthenticationManager;

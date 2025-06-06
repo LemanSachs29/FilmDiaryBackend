@@ -48,29 +48,6 @@ public class MovieIntegrationService {
         }
     }
 
-    /**
-     * Elimina una película de la watchlist del usuario (idempotente)
-     */
-    public void removeFromWatchlist(Long usuarioId, Long tmdbId) {
-        log.info("Removing movie {} from watchlist for user {}", tmdbId, usuarioId);
-        
-        // 1. Buscar la película en BD local
-        Optional<PeliculaEntity> peliculaOpt = peliculaService.findByTmdbId(tmdbId);
-        if (peliculaOpt.isEmpty()) {
-            log.debug("Movie {} not found in local database for user {} - no action needed", tmdbId, usuarioId);
-            return;
-        }
-        
-        PeliculaEntity pelicula = peliculaOpt.get();
-        
-        // 2. Eliminar solo si está en la watchlist (idempotente)
-        if (watchlistService.isInWatchlist(usuarioId, pelicula.getId())) {
-            watchlistService.removeFromWatchlist(usuarioId, pelicula.getId());
-            log.info("Movie {} successfully removed from watchlist for user {}", tmdbId, usuarioId);
-        } else {
-            log.debug("Movie {} not in watchlist for user {} - no action needed", tmdbId, usuarioId);
-        }
-    }
 
     /**
      * Añade una película de TMDB al diario del usuario
