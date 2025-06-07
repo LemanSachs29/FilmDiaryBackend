@@ -112,8 +112,7 @@ public class MovieIntegrationService {
         return PeliculaEntity.builder()
                 .idTmdb(tmdbMovie.getId())
                 .titulo(tmdbMovie.getTitle())
-                .posterUrl(tmdbMovie.getPosterPath() != null ? 
-                    "https://image.tmdb.org/t/p/w500" + tmdbMovie.getPosterPath() : null)
+                .posterUrl(tmdbMovie.getPosterPath())
                 .releaseDate(parseReleaseDate(tmdbMovie.getReleaseDate()))
                 .build();
     }
