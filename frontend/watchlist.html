@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FilmDiary - Mi Lista</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                🎬 FilmDiary
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Buscar Películas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="diary.html">Mi Diario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="watchlist.html">Mi Lista</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="logout-btn">Cerrar Sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h3 mb-1">⏰ Mi Lista de Películas por Ver</h1>
+                        <p class="text-muted">Películas que quieres ver próximamente</p>
+                    </div>
+                    <div class="text-end">
+                        <div id="watchlist-stats" class="small text-muted mb-2">
+                            <div>Total en lista: <strong id="total-movies">-</strong></div>
+                            <div>Añadidas recientemente: <strong id="recent-count">-</strong></div>
+                        </div>
+                        <a href="search.html" class="btn btn-warning btn-sm">
+                            + Añadir película
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opciones de vista y ordenamiento -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                                <small class="text-muted">Vista:</small>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="view-mode" id="grid-view" checked>
+                                    <label class="btn btn-outline-secondary" for="grid-view">📱 Grid</label>
+                                    
+                                    <input type="radio" class="btn-check" name="view-mode" id="list-view">
+                                    <label class="btn btn-outline-secondary" for="list-view">📋 Lista</label>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small class="text-muted">Ordenar:</small>
+                                <select id="sort-filter" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="date-desc">Añadidas recientemente</option>
+                                    <option value="date-asc">Añadidas hace tiempo</option>
+                                    <option value="title-asc">Título (A-Z)</option>
+                                    <option value="title-desc">Título (Z-A)</option>
+                                    <option value="release-desc">Más recientes</option>
+                                    <option value="release-asc">Más antiguas</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="row" id="loading-container">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Cargando tu lista...</span>
+                </div>
+                <p class="mt-3 text-muted">Cargando tu lista de películas por ver...</p>
+            </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="row" id="empty-container" style="display: none;">
+            <div class="col-12">
+                <div class="card border-0 bg-light text-center py-5">
+                    <div class="card-body">
+                        <i class="fs-1 mb-3">⏰</i>
+                        <h5 class="text-muted">Tu lista está vacía</h5>
+                        <p class="text-muted">¿No sabes qué ver? ¡Añade películas para verlas más tarde!</p>
+                        <a href="search.html" class="btn btn-warning">
+                            Buscar películas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div class="row" id="error-container" style="display: none;">
+            <div class="col-12">
+                <div class="card border-danger">
+                    <div class="card-body text-center py-4">
+                        <i class="fs-1 mb-3">😞</i>
+                        <h5 class="card-title text-danger">Error al cargar la lista</h5>
+                        <p class="card-text" id="error-message">No se pudo cargar tu lista de películas.</p>
+                        <button class="btn btn-primary" onclick="window.location.reload()">
+                            Reintentar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Watchlist container -->
+        <div id="watchlist-container" style="display: none;">
+            <!-- Grid view -->
+            <div class="row" id="watchlist-grid">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <!-- List view -->
+            <div id="watchlist-list" style="display: none;">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th></th> <!-- Poster -->
+                                        <th>Película</th>
+                                        <th>Fecha de Estreno</th>
+                                        <th>Añadida</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="watchlist-table-body">
+                                    <!-- Se llena dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información de paginación -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <small class="text-muted" id="pagination-info">
+                        <!-- Se llena dinámicamente -->
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <nav aria-label="Paginación de la lista">
+                        <ul class="pagination pagination-sm justify-content-end mb-0" id="pagination">
+                            <!-- Se llena dinámicamente -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para mover al diario -->
+    <div class="modal fade" id="moveTodiaryModal" tabindex="-1" aria-labelledby="moveToDiaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="moveToDiaryModalLabel">Marcar como vista</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Película info -->
+                    <div class="d-flex align-items-center mb-3 p-3 bg-light rounded">
+                        <img id="move-movie-poster" 
+                             src="" 
+                             alt="Poster" 
+                             class="rounded me-3" 
+                             style="width: 60px; height: 90px; object-fit: cover;">
+                        <div>
+                            <h6 id="move-movie-title" class="mb-1"></h6>
+                            <small id="move-movie-year" class="text-muted"></small>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>¿Ya viste esta película?</strong><br>
+                            Se añadirá a tu diario y se eliminará de esta lista.
+                        </small>
+                    </div>
+
+                    <form id="move-form">
+                        <!-- Fecha de visionado -->
+                        <div class="mb-3">
+                            <label for="move-fecha-visionado" class="form-label">¿Cuándo la viste?</label>
+                            <input type="date" 
+                                   class="form-control" 
+                                   id="move-fecha-visionado" 
+                                   max="" 
+                                   required>
+                        </div>
+
+                        <!-- Puntuación -->
+                        <div class="mb-3">
+                            <label for="move-puntuacion" class="form-label">¿Qué te pareció?</label>
+                            <div class="star-rating-input mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="star-buttons" data-rating="0">
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="1">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="2">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="3">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="4">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="5">⭐</button>
+                                    </div>
+                                    <span id="move-rating-text" class="text-muted">Sin puntuación</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="move-puntuacion" name="puntuacion" value="0">
+                            <div class="form-text">Opcional - puedes puntuar la película</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="confirm-move-btn">
+                        <span id="confirm-move-text">✓ Marcar como vista</span>
+                        <span id="confirm-move-spinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container para notificaciones -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container">
+        <!-- Los toasts se añaden dinámicamente -->
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- API -->
+    <script src="js/api.js"></script>
+    
+    <!-- Watchlist Logic -->
+    <script src="js/watchlist.js"></script>
+</body>
+</html>

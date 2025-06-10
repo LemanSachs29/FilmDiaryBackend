@@ -8,7 +8,7 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Guarda el token en localStorage y en la instancia
+     * Guarda el token y datos del usuario en localStorage
      */
     setToken(token) {
         this.token = token;
@@ -16,11 +16,35 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Elimina el token (logout)
+     * Guarda los datos del usuario logueado
+     */
+    setUserData(userData) {
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+    }
+
+    /**
+     * Obtiene los datos del usuario logueado
+     */
+    getCurrentUser() {
+        const userData = localStorage.getItem('currentUser');
+        return userData ? JSON.parse(userData) : null;
+    }
+
+    /**
+     * Obtiene solo el ID del usuario actual
+     */
+    getCurrentUserId() {
+        const user = this.getCurrentUser();
+        return user ? user.userId : null;
+    }
+
+    /**
+     * Elimina el token y datos del usuario (logout)
      */
     clearToken() {
         this.token = null;
         localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUser');
     }
 
     /**
@@ -82,8 +106,9 @@ class FilmDiaryAPI {
             auth: false // No necesita token para login
         });
 
-        if (response.token) {
+        if (response.token && response.user) {
             this.setToken(response.token);
+            this.setUserData(response.user);
         }
 
         return response;
@@ -99,8 +124,9 @@ class FilmDiaryAPI {
             auth: false // No necesita token para registro
         });
 
-        if (response.token) {
+        if (response.token && response.user) {
             this.setToken(response.token);
+            this.setUserData(response.user);
         }
 
         return response;
@@ -145,9 +171,14 @@ class FilmDiaryAPI {
     // ==================== DIARIO ====================
 
     /**
-     * Obtener diario paginado del usuario
+     * Obtener diario paginado del usuario actual
      */
-    async getDiary(usuarioId, page = 0, size = 10) {
+    async getDiary(page = 0, size = 10) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId,
             page: page,
@@ -158,9 +189,27 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Añadir película de TMDB al diario
+     * Obtener diario paginado del usuario (versión con usuarioId explícito)
      */
-    async addToDiary(usuarioId, tmdbId, puntuacion = null, fechaVisionado = null) {
+    async getDiaryForUser(usuarioId, page = 0, size = 10) {
+        const params = new URLSearchParams({
+            usuarioId: usuarioId,
+            page: page,
+            size: size
+        });
+
+        return await this.makeRequest(`/diario?${params}`);
+    }
+
+    /**
+     * Añadir película de TMDB al diario del usuario actual
+     */
+    async addToDiary(tmdbId, puntuacion = null, fechaVisionado = null) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId
         });
@@ -216,9 +265,14 @@ class FilmDiaryAPI {
     // ==================== WATCHLIST ====================
 
     /**
-     * Obtener watchlist paginada del usuario
+     * Obtener watchlist paginada del usuario actual
      */
-    async getWatchlist(usuarioId, page = 0, size = 10) {
+    async getWatchlist(page = 0, size = 10) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId,
             page: page,
@@ -229,9 +283,27 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Añadir película de TMDB a la watchlist
+     * Obtener watchlist paginada del usuario (versión con usuarioId explícito)
      */
-    async addToWatchlist(usuarioId, tmdbId) {
+    async getWatchlistForUser(usuarioId, page = 0, size = 10) {
+        const params = new URLSearchParams({
+            usuarioId: usuarioId,
+            page: page,
+            size: size
+        });
+
+        return await this.makeRequest(`/watchlist?${params}`);
+    }
+
+    /**
+     * Añadir película de TMDB a la watchlist del usuario actual
+     */
+    async addToWatchlist(tmdbId) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId
         });
@@ -242,9 +314,14 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Eliminar película de la watchlist
+     * Eliminar película de la watchlist del usuario actual
      */
-    async removeFromWatchlist(usuarioId, peliculaId) {
+    async removeFromWatchlist(peliculaId) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId
         });
@@ -255,9 +332,14 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Verificar si una película está en la watchlist
+     * Verificar si una película está en la watchlist del usuario actual
      */
-    async isInWatchlist(usuarioId, peliculaId) {
+    async isInWatchlist(peliculaId) {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId
         });
@@ -266,9 +348,14 @@ class FilmDiaryAPI {
     }
 
     /**
-     * Obtener conteo de películas en watchlist
+     * Obtener conteo de películas en watchlist del usuario actual
      */
-    async getWatchlistCount(usuarioId) {
+    async getWatchlistCount() {
+        const usuarioId = this.getCurrentUserId();
+        if (!usuarioId) {
+            throw new Error('Usuario no autenticado');
+        }
+
         const params = new URLSearchParams({
             usuarioId: usuarioId
         });

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FilmDiary - Detalles de Película</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                🎬 FilmDiary
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Buscar Películas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="diary.html">Mi Diario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="watchlist.html">Mi Lista</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="logout-btn">Cerrar Sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        <!-- Botón volver -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <button class="btn btn-outline-secondary" onclick="history.back()">
+                    ← Volver
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="row" id="loading-container">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando detalles...</span>
+                </div>
+                <p class="mt-3 text-muted">Cargando información de la película...</p>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div class="row" id="error-container" style="display: none;">
+            <div class="col-12">
+                <div class="card border-danger">
+                    <div class="card-body text-center py-5">
+                        <i class="fs-1 mb-3">😞</i>
+                        <h5 class="card-title text-danger">Error al cargar la película</h5>
+                        <p class="card-text" id="error-message">No se pudo obtener la información de esta película.</p>
+                        <div class="mt-3">
+                            <button class="btn btn-primary me-2" onclick="window.location.reload()">
+                                Reintentar
+                            </button>
+                            <a href="search.html" class="btn btn-outline-secondary">
+                                Volver a buscar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie details container -->
+        <div id="movie-container" style="display: none;">
+            <!-- Movie header -->
+            <div class="row mb-4">
+                <div class="col-md-4 col-lg-3">
+                    <img id="movie-poster" 
+                         src="" 
+                         alt="Poster" 
+                         class="img-fluid rounded shadow movie-poster"
+                         style="width: 100%; max-width: 400px;">
+                </div>
+                <div class="col-md-8 col-lg-9">
+                    <div class="movie-header-info">
+                        <h1 id="movie-title" class="display-5 mb-2"></h1>
+                        <h6 id="movie-original-title" class="text-muted mb-3"></h6>
+                        
+                        <!-- Movie meta info -->
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <p class="mb-1">
+                                    <strong>Fecha de estreno:</strong> 
+                                    <span id="movie-release-date" class="text-muted">-</span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Duración:</strong> 
+                                    <span id="movie-runtime" class="text-muted">-</span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Rating TMDB:</strong> 
+                                    <span id="movie-rating" class="text-muted">-</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1">
+                                    <strong>Géneros:</strong>
+                                </p>
+                                <div id="movie-genres" class="mb-2">
+                                    <!-- Se llenan dinámicamente -->
+                                </div>
+                                <p class="mb-1">
+                                    <strong>Estado:</strong>
+                                    <span id="movie-status" class="text-muted">-</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button id="add-to-diary-btn" 
+                                            class="btn btn-success" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#diaryModal">
+                                        ✓ Añadir al Diario
+                                    </button>
+                                    
+                                    <button id="add-to-watchlist-btn" 
+                                            class="btn btn-warning">
+                                        ⏰ Añadir a Mi Lista
+                                    </button>
+
+                                    <!-- Status indicators (shown when already added) -->
+                                    <div id="diary-status" class="d-none">
+                                        <span class="badge bg-success fs-6 px-3 py-2">
+                                            ✓ En tu diario
+                                        </span>
+                                    </div>
+                                    
+                                    <div id="watchlist-status" class="d-none">
+                                        <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                            ⏰ En tu lista
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie synopsis -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Sinopsis</h5>
+                            <p id="movie-overview" class="card-text">
+                                <!-- Se llena dinámicamente -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional info -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">Información adicional</h6>
+                            <p class="small mb-1">
+                                <strong>Idioma original:</strong> 
+                                <span id="movie-language">-</span>
+                            </p>
+                            <p class="small mb-1">
+                                <strong>Presupuesto:</strong> 
+                                <span id="movie-budget">-</span>
+                            </p>
+                            <p class="small mb-0">
+                                <strong>Recaudación:</strong> 
+                                <span id="movie-revenue">-</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">Popularidad</h6>
+                            <p class="small mb-1">
+                                <strong>Puntuación TMDB:</strong> 
+                                <span id="movie-vote-average">-</span>/10
+                            </p>
+                            <p class="small mb-1">
+                                <strong>Votos:</strong> 
+                                <span id="movie-vote-count">-</span>
+                            </p>
+                            <p class="small mb-0">
+                                <strong>Popularidad:</strong> 
+                                <span id="movie-popularity">-</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para añadir al diario -->
+    <div class="modal fade" id="diaryModal" tabindex="-1" aria-labelledby="diaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="diaryModalLabel">Añadir película al diario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="diary-form">
+                        <!-- Fecha de visionado -->
+                        <div class="mb-3">
+                            <label for="fecha-visionado" class="form-label">Fecha en que la viste</label>
+                            <input type="date" 
+                                   class="form-control" 
+                                   id="fecha-visionado" 
+                                   max="" 
+                                   required>
+                            <div class="form-text">¿Cuándo viste esta película?</div>
+                        </div>
+
+                        <!-- Puntuación -->
+                        <div class="mb-3">
+                            <label for="puntuacion" class="form-label">Tu puntuación</label>
+                            <div class="star-rating-input mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="star-buttons" data-rating="0">
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="1">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="2">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="3">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="4">⭐</button>
+                                        <button type="button" class="btn btn-outline-warning star-btn" data-value="5">⭐</button>
+                                    </div>
+                                    <span id="rating-text" class="text-muted">Sin puntuación</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="puntuacion" name="puntuacion" value="0">
+                            <div class="form-text">Haz clic en las estrellas para puntuar (opcional)</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="save-diary-btn">
+                        <span id="save-diary-text">Guardar en diario</span>
+                        <span id="save-diary-spinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container para notificaciones -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container">
+        <!-- Los toasts se añaden dinámicamente -->
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- API -->
+    <script src="js/api.js"></script>
+    
+    <!-- Movie Detail Logic -->
+    <script src="js/movie-detail.js"></script>
+</body>
+</html>

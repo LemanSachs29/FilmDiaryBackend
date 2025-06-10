@@ -3,7 +3,6 @@
  */
 class DashboardManager {
     constructor() {
-        this.currentUserId = 8; // Usuario de prueba
         this.initializeElements();
         this.checkAuthentication();
         this.attachEventListeners();
@@ -64,6 +63,7 @@ class DashboardManager {
         try {
             // Cargar datos en paralelo para mejor rendimiento
             await Promise.all([
+                this.loadUserInfo(),
                 this.loadLastMovie(),
                 this.loadWatchlistPreview(),
                 this.loadWatchlistCount()
@@ -77,11 +77,29 @@ class DashboardManager {
     }
 
     /**
+     * Carga información del usuario para personalizar la bienvenida
+     */
+    async loadUserInfo() {
+        try {
+            const user = api.getCurrentUser();
+            if (user && user.nombre) {
+                // Personalizar el mensaje de bienvenida
+                const welcomeTitle = document.querySelector('h1.h3');
+                if (welcomeTitle) {
+                    welcomeTitle.textContent = `¡Bienvenido${user.nombre ? ', ' + user.nombre : ''}! 🎬`;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user info:', error);
+        }
+    }
+
+    /**
      * Carga la última película vista
      */
     async loadLastMovie() {
         try {
-            const diaryResponse = await api.getDiary(this.currentUserId, 0, 1); // Solo la primera (más reciente)
+            const diaryResponse = await api.getDiary(0, 1); // Solo la primera (más reciente)
             
             if (diaryResponse.content && diaryResponse.content.length > 0) {
                 const lastEntry = diaryResponse.content[0];
@@ -100,7 +118,7 @@ class DashboardManager {
      */
     async loadWatchlistPreview() {
         try {
-            const watchlistResponse = await api.getWatchlist(this.currentUserId, 0, 3);
+            const watchlistResponse = await api.getWatchlist(0, 3);
             
             if (watchlistResponse.content && watchlistResponse.content.length > 0) {
                 this.displayWatchlistPreview(watchlistResponse.content);
@@ -118,7 +136,7 @@ class DashboardManager {
      */
     async loadWatchlistCount() {
         try {
-            const count = await api.getWatchlistCount(this.currentUserId);
+            const count = await api.getWatchlistCount();
             this.watchlistCount.textContent = count || 0;
         } catch (error) {
             console.error('Error loading watchlist count:', error);

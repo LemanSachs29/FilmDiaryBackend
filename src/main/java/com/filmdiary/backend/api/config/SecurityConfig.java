@@ -13,9 +13,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.filmdiary.backend.api.security.CustomUserDetailsService;
 import com.filmdiary.backend.api.security.JwtAuthFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,14 +33,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ← AÑADIR ESTA LÍNEA
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-    "/api/auth/login", 
-                "/api/auth/register", 
-                "/swagger-ui/**", 
-                "/v3/api-docs/**", 
-                "/swagger-ui.html").permitAll()
+                    "/api/auth/login", 
+                    "/api/auth/register", 
+                    "/swagger-ui/**", 
+                    "/v3/api-docs/**", 
+                    "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -45,12 +51,35 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // ← AÑADIR ESTE MÉTODO COMPLETO
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Permitir todos los orígenes para desarrollo
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        
+        // Métodos permitidos
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        
+        // Headers permitidos
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        
+        // Permitir credenciales
+        configuration.setAllowCredentials(true);
+        
+        // Aplicar a todas las rutas de la API
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        
+        return source;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -59,7 +88,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
