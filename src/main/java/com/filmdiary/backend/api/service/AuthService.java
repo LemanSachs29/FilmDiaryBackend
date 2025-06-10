@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.filmdiary.backend.api.dto.AuthRequestDto;
 import com.filmdiary.backend.api.dto.AuthResponseDto;
+import com.filmdiary.backend.api.dto.AuthResponseDto.UserInfoDto;
 import com.filmdiary.backend.api.entity.Role;
 import com.filmdiary.backend.api.entity.UsuarioEntity;
 import com.filmdiary.backend.api.repository.UsuarioRepository;
@@ -45,7 +46,12 @@ public class AuthService {
         log.info("Successful login: {}", request.getEmail());
         
         String token = jwtUtil.generateToken(user);
-        return new AuthResponseDto(token);
+        UserInfoDto userInfo = convertToUserInfo(user);
+        
+        return AuthResponseDto.builder()
+                .token(token)
+                .user(userInfo)
+                .build();
     }
 
     public AuthResponseDto register(AuthRequestDto request) {
@@ -73,11 +79,32 @@ public class AuthService {
         }
         
         UsuarioEntity nuevoUsuario = builder.build();
-        usuarioRepo.save(nuevoUsuario);
+        UsuarioEntity usuarioGuardado = usuarioRepo.save(nuevoUsuario);
         
-        log.info("User registered successfully: {}", nuevoUsuario.getEmail());
+        log.info("User registered successfully: {}", usuarioGuardado.getEmail());
 
-        String token = jwtUtil.generateToken(nuevoUsuario);
-        return new AuthResponseDto(token);
+        String token = jwtUtil.generateToken(usuarioGuardado);
+        UserInfoDto userInfo = convertToUserInfo(usuarioGuardado);
+        
+        return AuthResponseDto.builder()
+                .token(token)
+                .user(userInfo)
+                .build();
+    }
+    
+    /**
+     * Convierte una entidad Usuario a UserInfoDto
+     */
+    private UserInfoDto convertToUserInfo(UsuarioEntity usuario) {
+        return UserInfoDto.builder()
+                .id(usuario.getId())
+                .username(usuario.getUsername())
+                .email(usuario.getEmail())
+                .nombre(usuario.getNombre())
+                .apellido(usuario.getApellido())
+                .fechaNac(usuario.getFechaNac())
+                .fechaAlta(usuario.getFechaAlta())
+                .role(usuario.getRole().name())
+                .build();
     }
 }

@@ -1,0 +1,167 @@
+/* ============= ESTILOS GLOBALES ============= */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Mejorar la apariencia de los cards */
+.card {
+    border-radius: 12px;
+    border: none;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* ============= PÁGINA DE LOGIN/REGISTRO ============= */
+
+/* Estilo del logo/título */
+.card-body h1 {
+    color: #495057;
+    font-weight: 600;
+}
+
+/* Mejorar inputs */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Botones mejorados */
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* ============= ALERTAS/MENSAJES ============= */
+
+.alert {
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+/* ============= UTILIDADES ============= */
+
+/* Transiciones suaves */
+.form-control,
+.btn,
+.alert {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Spinner mejorado */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Links mejorados */
+a {
+    color: #0d6efd;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #0b5ed7;
+}
+
+/* ============= RESPONSIVE ============= */
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+/* ============= FUTUROS ESTILOS (placeholder) ============= */
+
+/* Para las cards de películas */
+.movie-card {
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Para el poster de películas */
+.movie-poster {
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+}
+
+/* Para tablas */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* Para modals */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+/* Para ratings con estrellas */
+.star-rating {
+    color: #ffc107;
+}
+
+.star-rating .far {
+    color: #dee2e6;
+}

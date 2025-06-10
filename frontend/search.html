@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FilmDiary - Buscar Películas</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                🎬 FilmDiary
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="search.html">Buscar Películas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="diary.html">Mi Diario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="watchlist.html">Mi Lista</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" id="logout-btn">Cerrar Sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        <!-- Título y barra de búsqueda -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="h3 mb-3">🔍 Buscar Películas</h1>
+                <p class="text-muted">Explora el catálogo de The Movie Database (TMDB)</p>
+                
+                <!-- Barra de búsqueda -->
+                <div class="card">
+                    <div class="card-body">
+                        <form id="search-form" class="row g-3">
+                            <div class="col-md-8">
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="search-query" 
+                                       placeholder="Escribe el título de una película..."
+                                       required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" 
+                                        class="btn btn-primary btn-lg w-100" 
+                                        id="search-btn">
+                                    <span id="search-text">Buscar</span>
+                                    <span id="search-spinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de resultados -->
+        <div class="row mb-3" id="results-info" style="display: none;">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        Resultados para: "<span id="search-term"></span>"
+                    </h5>
+                    <small class="text-muted">
+                        <span id="results-count">0</span> películas encontradas
+                    </small>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Resultados de búsqueda -->
+        <div class="row" id="search-results">
+            <!-- Se llenarán dinámicamente -->
+        </div>
+
+        <!-- Estado vacío / sin búsqueda -->
+        <div class="row" id="empty-state">
+            <div class="col-12">
+                <div class="card border-0 bg-light text-center py-5">
+                    <div class="card-body">
+                        <i class="fs-1 mb-3">🎬</i>
+                        <h5 class="text-muted">¡Encuentra tu próxima película favorita!</h5>
+                        <p class="text-muted">Usa la barra de búsqueda para explorar miles de películas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sin resultados -->
+        <div class="row" id="no-results" style="display: none;">
+            <div class="col-12">
+                <div class="card border-0 bg-light text-center py-5">
+                    <div class="card-body">
+                        <i class="fs-1 mb-3">😞</i>
+                        <h5 class="text-muted">No se encontraron resultados</h5>
+                        <p class="text-muted">Intenta con otro término de búsqueda</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('search-query').focus()">
+                            Buscar de nuevo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="row mt-4" id="pagination-container" style="display: none;">
+            <div class="col-12">
+                <nav aria-label="Paginación de resultados">
+                    <ul class="pagination justify-content-center" id="pagination">
+                        <!-- Se llenará dinámicamente -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="position-fixed top-50 start-50 translate-middle" id="loading-overlay" style="display: none; z-index: 9999;">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Buscando...</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- API -->
+    <script src="js/api.js"></script>
+    
+    <!-- Search Logic -->
+    <script src="js/search.js"></script>
+</body>
+</html>
