@@ -35,17 +35,59 @@ film-diary-backend/
 
 ## 🚀 Estado Actual - FUNCIONALIDADES VERIFICADAS
 
-### ✅ **COMPLETAMENTE FUNCIONAL**
-- **Registro de usuarios** - Validaciones completas, almacenamiento seguro
-- **Inicio de sesión** - Autenticación JWT, sesión persistente
-- **Cierre de sesión** - Limpieza completa de datos
-- **Búsqueda de películas** - Integración TMDB con paginación
+📋 FilmDiary - Checklist de Estado
+✅ VERIFICADO Y FUNCIONANDO 100%
+🔐 Sistema de Autenticación
 
-### 🔧 **DESARROLLADO (Pendiente de verificación)**
-- **Dashboard principal** - Vista general personalizada
-- **Detalles de película** - Información completa + añadir al diario/watchlist  
-- **Diario personal** - Gestión de películas vistas
-- **Watchlist** - Lista de películas por ver
+✅ Registro de usuarios - Validaciones + JWT + almacenamiento
+✅ Inicio de sesión - Email/password + token persistente
+✅ Cierre de sesión - Limpieza localStorage + redirección
+
+🔍 Búsqueda y Navegación
+
+✅ Búsqueda de películas - TMDB API + paginación + resultados
+✅ Detalles de película - Info completa + poster + géneros + sinopsis
+
+🔧 Infraestructura Técnica
+
+✅ localStorage - Funcionando correctamente con Apache
+✅ API comunicación - Backend ↔ Frontend sin errores
+✅ CORS - Configurado y operativo
+✅ Responsive design - Bootstrap funcionando
+
+
+🔍 PENDIENTE DE VERIFICAR
+🏠 Dashboard Principal
+
+🔍 Carga de página - ¿Se muestra correctamente?
+🔍 Última película vista - ¿Aparece info o "vacío"?
+🔍 Preview watchlist - ¿Muestra películas o "vacía"?
+🔍 Contadores - ¿Estadísticas correctas?
+🔍 Navegación - ¿Links funcionan?
+
+🎬 Acciones de Película (movie-detail.html)
+
+🔍 Botón "Añadir al Diario" - ¿Modal funciona?
+🔍 Modal diario - ¿Fecha + estrellas + guardar?
+🔍 Botón "Añadir a Mi Lista" - ¿Añade a watchlist?
+🔍 Toasts/notificaciones - ¿Confirma acciones?
+
+📖 Diario Personal (diary.html)
+
+🔍 Carga de tabla - ¿Muestra películas vistas?
+🔍 Paginación - ¿Navega entre páginas?
+🔍 Filtros - ¿Año + rating + ordenamiento?
+🔍 Modal editar - ¿Funciona edición de entradas?
+🔍 Eliminar entradas - ¿Borra del diario?
+🔍 Estadísticas - ¿Total + promedio rating?
+
+⏰ Watchlist (watchlist.html)
+
+🔍 Carga de grid/lista - ¿Muestra películas por ver?
+🔍 Toggle vista - ¿Grid ↔ Lista funciona?
+🔍 Botón "Ya la vi" - ¿Modal mover a diario?
+🔍 Eliminar de lista - ¿Borra de watchlist?
+🔍 Estadísticas - ¿Total + recientes?
 
 ## 🔧 Configuración y Setup
 
