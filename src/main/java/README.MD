@@ -7,7 +7,8 @@ FilmDiary es una aplicación web completa para llevar un registro personal de pe
 ## 🏗️ Arquitectura
 
 - **Backend**: Spring Boot + MariaDB + JWT + Integración TMDB
-- **Frontend**: HTML + Bootstrap 5 + JavaScript vanilla (páginas tradicionales)
+- **Frontend**: HTML + Bootstrap 5 + JavaScript vanilla
+- **Servidor Web**: Apache (para el frontend)
 
 ## 📁 Estructura del Proyecto
 
@@ -15,215 +16,182 @@ FilmDiary es una aplicación web completa para llevar un registro personal de pe
 film-diary-backend/
 ├── src/                          # Código Java Spring Boot
 ├── frontend/                     # Aplicación web frontend
-│   ├── index.html               # ✅ Login/Registro (FUNCIONANDO)
-│   ├── dashboard.html           # ✅ Dashboard principal (FUNCIONANDO)
-│   ├── search.html              # ✅ Búsqueda de películas (FUNCIONANDO)
-│   ├── movie-detail.html        # ✅ Detalles de película (FUNCIONANDO)
-│   ├── diary.html               # 🚧 Diario con tabla (PENDIENTE)
-│   ├── watchlist.html           # 🚧 Lista de películas por ver (PENDIENTE)
-│   ├── css/
-│   │   └── styles.css           # ✅ Estilos personalizados
-│   ├── js/
-│   │   ├── api.js               # ✅ Clase para comunicación con backend
-│   │   ├── auth.js              # ✅ Login/registro (index.html)
-│   │   ├── dashboard.js         # ✅ Dashboard
-│   │   ├── search.js            # ✅ Búsqueda películas
-│   │   ├── movie-detail.js      # ✅ Detalles película
-│   │   ├── diary.js             # 🚧 Diario (PENDIENTE)
-│   │   └── watchlist.js         # 🚧 Watchlist (PENDIENTE)
+│   ├── index.html               # Login/Registro
+│   ├── dashboard.html           # Dashboard principal
+│   ├── search.html              # Búsqueda de películas
+│   ├── movie-detail.html        # Detalles de película
+│   ├── diary.html               # Diario personal
+│   ├── watchlist.html           # Lista de películas por ver
+│   ├── css/styles.css           # Estilos personalizados
+│   └── js/                      # Lógica JavaScript
+│       ├── api.js               # Comunicación con backend
+│       ├── auth.js              # Autenticación
+│       ├── dashboard.js         # Dashboard
+│       ├── search.js            # Búsqueda
+│       ├── movie-detail.js      # Detalles película
+│       ├── diary.js             # Diario
+│       └── watchlist.js         # Watchlist
 ```
 
-## 🚀 Estado del Desarrollo
+## 🚀 Estado Actual - FUNCIONALIDADES VERIFICADAS
 
-### ✅ COMPLETADO Y FUNCIONANDO
+### ✅ **COMPLETAMENTE FUNCIONAL**
+- **Registro de usuarios** - Validaciones completas, almacenamiento seguro
+- **Inicio de sesión** - Autenticación JWT, sesión persistente
+- **Cierre de sesión** - Limpieza completa de datos
+- **Búsqueda de películas** - Integración TMDB con paginación
 
-#### Backend (100% completo)
-- ✅ Autenticación JWT
-- ✅ Integración TMDB completa
-- ✅ CRUD Diario y Watchlist
-- ✅ Validaciones y manejo de errores
-- ✅ CORS configurado correctamente
-
-#### Frontend (70% completo)
-- ✅ **index.html + auth.js** - Login/registro con validaciones, guarda datos del usuario automáticamente
-- ✅ **dashboard.html + dashboard.js** - Página principal con última película vista, preview watchlist, navegación
-- ✅ **search.html + search.js** - Búsqueda en TMDB con paginación, solo botón "Ver Detalles" 
-- ✅ **movie-detail.html + movie-detail.js** - Página completa de detalles con:
-  - Información completa de película (poster, sinopsis, géneros, duración, etc.)
-  - Botón "Añadir al Diario" con modal (fecha + rating estrellas interactivo)
-  - Botón "Añadir a Watchlist" 
-  - Toasts de notificación
-  - Manejo de estados y errores
-- ✅ **api.js** - Clase completamente integrada que maneja automáticamente el usuario logueado
-- ✅ **styles.css** - Estilos personalizados con Bootstrap 5
-
-### 🚧 PENDIENTE
-
-- 🚧 **diary.html + diary.js** - Tabla paginada de películas vistas + modal de edición
-- 🚧 **watchlist.html + watchlist.js** - Grid de películas por ver + eliminar/mover al diario
-
-## 🔌 API Endpoints (Backend)
-
-### Autenticación
-- `POST /api/auth/login` - Iniciar sesión (devuelve token + datos usuario)
-- `POST /api/auth/register` - Registrar usuario (devuelve token + datos usuario)
-
-### Búsqueda de Películas  
-- `GET /api/movies/search?query={query}&page={page}` - Buscar películas en TMDB
-- `GET /api/movies/{movieId}` - Detalles de película específica
-
-### Diario Personal
-- `GET /api/diario?usuarioId={id}&page={page}&size={size}` - Obtener diario paginado
-- `POST /api/diario/tmdb/{tmdbId}?usuarioId={id}&puntuacion={rating}&fechaVisionado={date}` - Añadir película al diario
-- `PUT /api/diario/{entryId}?fechaVisionado={date}&puntuacion={rating}` - Actualizar entrada
-- `DELETE /api/diario/{entryId}` - Eliminar entrada
-- `GET /api/diario/{entryId}` - Obtener entrada específica
-
-### Watchlist
-- `GET /api/watchlist?usuarioId={id}&page={page}&size={size}` - Obtener watchlist paginada
-- `POST /api/watchlist/tmdb/{tmdbId}?usuarioId={id}` - Añadir película a watchlist
-- `DELETE /api/watchlist/{peliculaId}?usuarioId={id}` - Eliminar de watchlist
-- `GET /api/watchlist/check/{peliculaId}?usuarioId={id}` - Verificar si está en watchlist
-- `GET /api/watchlist/count?usuarioId={id}` - Contar películas en watchlist
+### 🔧 **DESARROLLADO (Pendiente de verificación)**
+- **Dashboard principal** - Vista general personalizada
+- **Detalles de película** - Información completa + añadir al diario/watchlist  
+- **Diario personal** - Gestión de películas vistas
+- **Watchlist** - Lista de películas por ver
 
 ## 🔧 Configuración y Setup
 
-### Requisitos
+### **Requisitos**
 - Java 17+
 - MariaDB
+- Apache HTTP Server
 - API Key de TMDB
-- Python 3 (para servir frontend) o servidor web
 
-### Variables de Entorno
+### **Variables de Entorno**
 ```bash
 export TMDB_API_KEY="tu_api_key_de_tmdb"
 ```
 
-### Base de Datos
+### **Base de Datos**
 MariaDB con esquemas: `usuario`, `pelicula`, `usuario_diario`, `usuario_watchlist`
 
-### Ejecutar Backend
+### **Ejecutar Backend**
 ```bash
 cd film-diary-backend
 ./mvnw spring-boot:run
 ```
+El backend estará disponible en: `http://localhost:8080`
 
-### Ejecutar Frontend
+### **Configurar Frontend con Apache**
+
+#### **1. Copiar archivos frontend**
 ```bash
-cd frontend
-python3 -m http.server 3000
-# Abrir: http://localhost:3000
+# Copiar la carpeta frontend al directorio de Apache
+sudo cp -r frontend/ /var/www/html/
 ```
 
-## 🚀 Flujo de Usuario (Funcionando)
+#### **2. Configurar permisos**
+```bash
+sudo chown -R www-data:www-data /var/www/html/frontend/
+sudo chmod -R 755 /var/www/html/frontend/
+```
 
-1. **Login/Registro** (`index.html`) → Token JWT + datos usuario almacenados automáticamente
-2. **Dashboard** (`dashboard.html`) → Vista general personalizada + navegación
-3. **Búsqueda** (`search.html`) → Encontrar películas → "Ver Detalles"
-4. **Detalles** (`movie-detail.html`) → Ver info completa → Añadir a diario/watchlist
-5. **Diario** (`diary.html`) → 🚧 PENDIENTE - Gestionar películas vistas
-6. **Watchlist** (`watchlist.html`) → 🚧 PENDIENTE - Gestionar películas por ver
+#### **3. Verificar Apache**
+```bash
+# Verificar que Apache esté ejecutándose
+sudo systemctl status apache2
 
-## 💡 Características Implementadas
+# Si no está activo, iniciarlo
+sudo systemctl start apache2
+```
 
-### Autenticación Automática
-- El frontend guarda automáticamente los datos del usuario al login/registro
-- Todos los métodos de API usan automáticamente el usuario logueado: `api.getDiary()`, `api.addToWatchlist()`
-- Logout limpia todo + redirección automática
+#### **4. Acceder a la aplicación**
+- **URL de acceso**: `http://localhost/frontend/index.html`
+- **Login/Registro**: `http://localhost/frontend/index.html`
+- **Búsqueda**: `http://localhost/frontend/search.html`
 
-### Funcionalidades Avanzadas
-- **Rating con estrellas** interactivo (1-5 estrellas + texto descriptivo)
+## 🔌 API Endpoints (Backend)
+
+### **Autenticación**
+- `POST /api/auth/login` - Iniciar sesión
+- `POST /api/auth/register` - Registrar usuario
+
+### **Búsqueda de Películas**  
+- `GET /api/movies/search?query={query}&page={page}` - Buscar películas en TMDB
+- `GET /api/movies/{movieId}` - Detalles de película específica
+
+### **Diario Personal**
+- `GET /api/diario?usuarioId={id}&page={page}&size={size}` - Obtener diario paginado
+- `POST /api/diario/tmdb/{tmdbId}?usuarioId={id}` - Añadir película al diario
+- `PUT /api/diario/{entryId}` - Actualizar entrada
+- `DELETE /api/diario/{entryId}` - Eliminar entrada
+
+### **Watchlist**
+- `GET /api/watchlist?usuarioId={id}&page={page}&size={size}` - Obtener watchlist paginada
+- `POST /api/watchlist/tmdb/{tmdbId}?usuarioId={id}` - Añadir película a watchlist
+- `DELETE /api/watchlist/{peliculaId}?usuarioId={id}` - Eliminar de watchlist
+- `GET /api/watchlist/count?usuarioId={id}` - Contar películas en watchlist
+
+## 🚀 Flujo de Usuario
+
+1. **Registro/Login** → Autenticación JWT + datos almacenados
+2. **Dashboard** → Vista general personalizada
+3. **Búsqueda** → Encontrar películas en TMDB
+4. **Detalles** → Ver información completa + añadir a diario/watchlist
+5. **Diario** → Gestionar películas vistas (editar, eliminar)
+6. **Watchlist** → Gestionar películas por ver
+
+## 💡 Características Técnicas
+
+### **Frontend**
+- **Autenticación automática** con localStorage
+- **API centralizada** (api.js) que maneja automáticamente el usuario logueado
 - **Sistema de notificaciones** con Bootstrap toasts
-- **Estados de carga** y manejo de errores en todas las páginas
-- **Formateo inteligente** (fechas en español, dinero, duración "2h 30min")
-- **Responsive design** completo con Bootstrap 5
+- **Estados de carga** y manejo de errores
+- **Rating con estrellas** interactivo (1-5 estrellas)
+- **Responsive design** con Bootstrap 5
 
-### Integración TMDB
-- Búsqueda en tiempo real (800ms delay)
-- Detalles completos de películas
-- Imágenes optimizadas con placeholders
-- Paginación funcional
+### **Backend**
+- **Seguridad JWT** con tokens persistentes
+- **Integración TMDB** completa
+- **Base de datos relacional** optimizada
+- **Validaciones** exhaustivas
+- **CORS** configurado para desarrollo local
 
-## 🔧 Problemas Resueltos
+## 🔧 Resolución de Problemas
 
-### ✅ CORS
-- Configurado correctamente en `SecurityConfig.java`
-- Permite desarrollo local (localhost:3000, localhost:8000)
+### **Problemas Comunes**
 
-### ✅ Manejo de Usuario
-- AuthResponseDto devuelve datos completos del usuario
-- Frontend guarda automáticamente token + datos usuario
-- API automáticamente usa el usuario logueado
+#### **1. Error de CORS**
+- Verificar que backend esté en `localhost:8080`
+- Verificar que frontend acceda via `http://localhost/frontend/`
 
-### ✅ Integración Frontend-Backend
-- api.js completamente funcional
-- Manejo de errores consistente
-- Estados de carga en todas las páginas
+#### **2. Error "api is not defined"**
+- Verificar que `js/api.js` se carga antes que otros scripts JS
+- Forzar recarga: `Ctrl+F5`
 
-## 🎯 URLs de Prueba
+#### **3. Error de localStorage**
+- Verificar acceso via HTTP (no file://)
+- Verificar que Apache esté sirviendo correctamente
 
-Una vez ejecutando:
+#### **4. Problemas de autenticación**
+- Verificar variable `TMDB_API_KEY` en backend
+- Verificar conexión a MariaDB
 
-### Páginas principales
-- `http://localhost:3000/index.html` - Login/registro
-- `http://localhost:3000/dashboard.html` - Dashboard principal
-- `http://localhost:3000/search.html` - Búsqueda de películas
-
-### Detalles de películas (ejemplos)
-- `http://localhost:3000/movie-detail.html?id=550` - Fight Club
-- `http://localhost:3000/movie-detail.html?id=13` - Forrest Gump  
-- `http://localhost:3000/movie-detail.html?id=122` - El Señor de los Anillos
-
-## 📝 Notas Técnicas
-
-### Arquitectura API Frontend
-```javascript
-// Uso automático del usuario logueado:
-await api.getDiary(0, 10);           // En lugar de api.getDiary(usuarioId, 0, 10)
-await api.addToWatchlist(tmdbId);    // En lugar de api.addToWatchlist(usuarioId, tmdbId)
-await api.getWatchlistCount();       // En lugar de api.getWatchlistCount(usuarioId)
-```
-
-### Manejo de Estados
-- **LocalStorage**: Token JWT + datos usuario completos
-- **Variables JS**: Datos temporales de la sesión
-- **Bootstrap Modals**: Para forms (añadir al diario)
-- **Bootstrap Toasts**: Para notificaciones
-
-### Validaciones
-- Frontend: Email válido, contraseña segura, campos obligatorios
-- Backend: Validaciones con anotaciones Spring + manejo de errores
-- Fechas: No futuras para fecha de visionado
-- Puntuaciones: 0-5 estrellas
-
-## 🎯 Siguiente Desarrollo
-
-### Prioridad Alta
-1. **diary.html + diary.js** - Tabla paginada con todas las películas vistas + modal de edición
-2. **watchlist.html + watchlist.js** - Grid de películas por ver + eliminar/mover al diario
-
-### Funcionalidades Avanzadas (Futuro)
-- Estadísticas personales
-- Exportar diario
-- Recomendaciones basadas en historial
-- Compartir listas
-
-## 🔍 Debugging
-
-### Problemas Comunes
-1. **CORS**: Verificar que frontend esté en `http://localhost:3000` (no file://)
-2. **API Key**: Verificar variable `TMDB_API_KEY` en backend
-3. **Base de datos**: Verificar conexión MariaDB en `application.yml`
-4. **Autenticación**: Verificar token JWT en localStorage del navegador
-
-### Logs Útiles
+### **Debugging**
 ```bash
-# Backend - Ver peticiones
+# Backend - Ver logs
 tail -f logs/spring.log
 
 # Frontend - Console del navegador
 F12 → Console → Ver errores JavaScript
 ```
+
+### **Reset completo**
+```javascript
+// En consola del navegador si es necesario
+localStorage.clear();
+window.location.reload();
+```
+
+## 🔍 URLs de Acceso
+
+### **Aplicación**
+- **Inicio**: `http://localhost/frontend/index.html`
+- **Dashboard**: `http://localhost/frontend/dashboard.html`
+- **Búsqueda**: `http://localhost/frontend/search.html`
+
+### **Backend**
+- **API**: `http://localhost:8080/api`
+- **Swagger**: `http://localhost:8080/swagger-ui.html`
 
 ---
 

@@ -113,8 +113,8 @@ class SearchManager {
             const response = await api.searchMovies(query, page, false);
             
             if (response && response.results && response.results.length > 0) {
-                this.totalPages = response.totalPages;
-                this.totalResults = response.totalResults;
+                this.totalPages = response.total_pages || response.totalPages || 0;
+                this.totalResults = response.total_results || response.totalResults || 0;
                 
                 this.displayResults(response.results);
                 this.updateResultsInfo();
@@ -137,17 +137,20 @@ class SearchManager {
      */
     displayResults(movies) {
         const moviesHtml = movies.map(movie => {
-            const posterUrl = this.getTmdbImageUrl(movie.posterPath);
-            const releaseYear = movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : 'Sin fecha';
-            const rating = movie.voteAverage ? movie.voteAverage.toFixed(1) : 'Sin rating';
+            const posterUrl = this.getTmdbImageUrl(movie.posterPath || movie.poster_path);
+            const releaseYear = movie.releaseDate || movie.release_date ? 
+                new Date(movie.releaseDate || movie.release_date).getFullYear() : 'Sin fecha';
+            const rating = movie.voteAverage || movie.vote_average ? 
+            (movie.voteAverage || movie.vote_average).toFixed(1) : 'Sin rating';
             
             return `
                 <div class="col-lg-3 col-md-4 col-sm-6 col-6 mb-4">
                     <div class="card h-100 movie-card shadow-sm">
                         <img src="${posterUrl}" 
-                             class="card-img-top movie-poster" 
-                             alt="${movie.title}"
-                             style="height: 350px; object-fit: cover;">
+                            class="card-img-top movie-poster" 
+                            alt="${movie.title}"
+                            style="height: 350px; object-fit: cover;"
+                            onerror="this.src='https://placehold.co/300x450/cccccc/666666?text=Sin+Imagen'">
                         <div class="card-body d-flex flex-column">
                             <h6 class="card-title" title="${movie.title}">
                                 ${this.truncateText(movie.title, 50)}
@@ -179,7 +182,11 @@ class SearchManager {
      */
     updateResultsInfo() {
         this.searchTerm.textContent = this.currentQuery;
-        this.resultsCount.textContent = this.totalResults.toLocaleString();
+        if (typeof this.totalResults === 'number' && this.totalResults >= 0) {
+            this.resultsCount.textContent = this.totalResults.toLocaleString();
+        } else {
+            this.resultsCount.textContent = '0';
+        }
         this.resultsInfo.style.display = 'block';
     }
 
@@ -312,7 +319,7 @@ class SearchManager {
      */
     getTmdbImageUrl(posterPath) {
         if (!posterPath || posterPath === 'null') {
-            return 'https://via.placeholder.com/300x450/cccccc/666666?text=Sin+Imagen';
+            return 'https://placehold.co/300x450/cccccc/666666?text=Sin+Imagen';
         }
         
         if (posterPath.startsWith('http')) {
