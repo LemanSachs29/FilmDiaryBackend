@@ -319,6 +319,32 @@ class FilmDiaryAPI {
     });
   }
 
+  async updateDiaryEntry(entryId, fechaVisionado, puntuacion) {
+    console.log(`📖 Actualizando entrada ${entryId} del diario`);
+
+    const params = new URLSearchParams();
+    
+    if (fechaVisionado) {
+      params.append("fechaVisionado", fechaVisionado);
+    }
+    
+    if (puntuacion !== null && puntuacion !== undefined) {
+      params.append("puntuacion", puntuacion);
+    }
+
+    return await this.makeRequest(`/diario/${entryId}?${params}`, {
+      method: "PUT",
+    });
+  }
+
+  async removeDiaryEntry(entryId) {
+    console.log(`📖 Eliminando entrada ${entryId} del diario`);
+
+    return await this.makeRequest(`/diario/${entryId}`, {
+      method: "DELETE",
+    });
+  }
+
   // ==================== WATCHLIST ====================
 
   async getWatchlist(page = 0, size = 10) {
@@ -366,6 +392,45 @@ class FilmDiaryAPI {
     });
 
     return await this.makeRequest(`/watchlist/count?${params}`);
+  }
+
+  async checkWatchlistByTmdbId(tmdbId) {
+    const usuarioId = this.getCurrentUserId();
+    if (!usuarioId) {
+      throw new Error("Usuario no autenticado");
+    }
+
+    console.log(`🔍 Verificando si película TMDB ${tmdbId} está en watchlist`);
+
+    const params = new URLSearchParams({
+      usuarioId: usuarioId,
+    });
+
+    const result = await this.makeRequest(
+      `/watchlist/check/tmdb/${tmdbId}?${params}`
+    );
+    console.log(
+      `✅ Película ${tmdbId} ${result ? "SÍ" : "NO"} está en watchlist`
+    );
+
+    return result;
+  }
+
+  async removeFromWatchlist(peliculaId) {
+    const usuarioId = this.getCurrentUserId();
+    if (!usuarioId) {
+      throw new Error("Usuario no autenticado");
+    }
+
+    console.log(`⏰ Eliminando película ${peliculaId} de watchlist`);
+
+    const params = new URLSearchParams({
+      usuarioId: usuarioId,
+    });
+
+    return await this.makeRequest(`/watchlist/${peliculaId}?${params}`, {
+      method: "DELETE",
+    });
   }
 }
 

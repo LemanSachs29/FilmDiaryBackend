@@ -42,5 +42,8 @@ public class WatchlistService {
         return watchlistRepository.existsById(key);  // ← Método que ya tienes
     }
 
+    public boolean isInWatchlistByTmdbId(Long usuarioId, Long tmdbId) {
+        return watchlistRepository.existsByUsuarioAndTmdbId(usuarioId, tmdbId);
+    }
     
 }

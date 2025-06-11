@@ -459,18 +459,6 @@ class WatchlistManager {
                 btn.classList.add('btn-outline-warning');
             }
         });
-        
-        // Actualizar texto
-        const ratingTexts = {
-            0: 'Sin puntuación',
-            1: '⭐ Muy mala',
-            2: '⭐⭐ Mala',
-            3: '⭐⭐⭐ Regular',
-            4: '⭐⭐⭐⭐ Buena',
-            5: '⭐⭐⭐⭐⭐ Excelente'
-        };
-        
-        this.moveRatingText.textContent = ratingTexts[rating] || 'Sin puntuación';
     }
 
     /**

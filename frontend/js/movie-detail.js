@@ -154,16 +154,20 @@ class MovieDetailManager {
   /**
    * Verifica si la película está en diario/watchlist
    */
+  // DESPUÉS:
   async checkMovieStatuses() {
     try {
-      // Obtener el ID local de la película si existe
-      // Esto es un poco complejo porque necesitamos el ID local, no el de TMDB
-      // Por ahora, simplemente ocultamos los botones hasta implementar esta funcionalidad
-      // TODO: Implementar verificación de estado cuando tengamos endpoint para esto
-      // const isInDiary = await api.isInDiary(localMovieId);
-      // const isInWatchlist = await api.isInWatchlist(localMovieId);
+      // Verificar si está en watchlist usando TMDB ID
+      const isInWatchlist = await api.checkWatchlistByTmdbId(this.movieId);
+      this.updateWatchlistButton(isInWatchlist);
+
+      // TODO: Implementar verificación de diario cuando tengamos endpoint similar
+      // const isInDiary = await api.checkDiaryByTmdbId(this.movieId);
+      // this.updateDiaryButton(isInDiary);
     } catch (error) {
       console.error("Error checking movie statuses:", error);
+      // En caso de error, mostrar botones por defecto (no añadida)
+      this.updateWatchlistButton(false);
     }
   }
 
@@ -346,11 +350,19 @@ class MovieDetailManager {
    */
   updateDiaryButton(isInDiary) {
     if (isInDiary) {
-      this.addToDiaryBtn.style.display = "none";
-      this.diaryStatus.classList.remove("d-none");
+      this.addToDiaryBtn.textContent = "✓ Ya en tu diario";
+      this.addToDiaryBtn.disabled = true;
+      this.addToDiaryBtn.classList.remove("btn-success");
+      this.addToDiaryBtn.classList.add("btn-secondary");
+      this.addToDiaryBtn.removeAttribute("data-bs-toggle");
+      this.addToDiaryBtn.removeAttribute("data-bs-target");
     } else {
-      this.addToDiaryBtn.style.display = "inline-block";
-      this.diaryStatus.classList.add("d-none");
+      this.addToDiaryBtn.textContent = "✓ Añadir al Diario";
+      this.addToDiaryBtn.disabled = false;
+      this.addToDiaryBtn.classList.remove("btn-secondary");
+      this.addToDiaryBtn.classList.add("btn-success");
+      this.addToDiaryBtn.setAttribute("data-bs-toggle", "modal");
+      this.addToDiaryBtn.setAttribute("data-bs-target", "#diaryModal");
     }
   }
 

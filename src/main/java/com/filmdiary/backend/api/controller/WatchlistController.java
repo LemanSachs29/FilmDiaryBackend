@@ -18,7 +18,7 @@ public class WatchlistController {
 
     @Autowired
     private WatchlistService watchlistService;
-    
+
     @Autowired
     private MovieIntegrationService movieIntegrationService;
 
@@ -31,11 +31,11 @@ public class WatchlistController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam Long usuarioId) {
-        
+
         log.info("Getting watchlist for user: {} (page: {}, size: {})", usuarioId, page, size);
-        
+
         Page<UsuarioWatchlistEntity> watchlist = watchlistService.getWatchlistPaginada(usuarioId, page, size);
-        
+
         log.info("Retrieved {} watchlist entries for user {}", watchlist.getNumberOfElements(), usuarioId);
         return ResponseEntity.ok(watchlist);
     }
@@ -49,12 +49,12 @@ public class WatchlistController {
     public ResponseEntity<Void> addTmdbMovieToWatchlist(
             @PathVariable Long tmdbId,
             @RequestParam Long usuarioId) {
-        
+
         log.info("Adding TMDB movie {} to watchlist for user {}", tmdbId, usuarioId);
-        
+
         // Usar MovieIntegrationService que maneja la lógica de obtener/crear película
         movieIntegrationService.addToWatchlist(usuarioId, tmdbId);
-        
+
         log.info("TMDB movie {} successfully added to watchlist for user {}", tmdbId, usuarioId);
         return ResponseEntity.ok().build();
     }
@@ -67,31 +67,31 @@ public class WatchlistController {
     public ResponseEntity<Void> removeFromWatchlist(
             @PathVariable Long peliculaId,
             @RequestParam Long usuarioId) {
-        
+
         log.info("Removing movie {} from watchlist for user {}", peliculaId, usuarioId);
-        
+
         watchlistService.removeFromWatchlist(usuarioId, peliculaId);
-        
+
         log.info("Movie {} successfully removed from watchlist for user {}", peliculaId, usuarioId);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Verifica si una película está en la watchlist del usuario
-     * GET /api/watchlist/check/{peliculaId}
+     * GET /api/watchlist/check/tmdb/{tmdbId}
      */
-    @GetMapping("/check/{peliculaId}")
-    public ResponseEntity<Boolean> isInWatchlist(
-            @PathVariable Long peliculaId,
+    @GetMapping("/check/tmdb/{tmdbId}")
+    public ResponseEntity<Boolean> isInWatchlistByTmdbId(
+            @PathVariable Long tmdbId,
             @RequestParam Long usuarioId) {
-        
-        log.debug("Checking if movie {} is in watchlist for user {}", peliculaId, usuarioId);
-        
-        boolean exists = watchlistService.isInWatchlist(usuarioId, peliculaId);
-        
-        log.debug("Movie {} {} in watchlist for user {}", 
-                 peliculaId, exists ? "is" : "is not", usuarioId);
-        
+
+        log.debug("Checking if movie {} (TMDB) is in watchlist for user {}", tmdbId, usuarioId);
+
+        boolean exists = watchlistService.isInWatchlistByTmdbId(usuarioId, tmdbId);
+
+        log.debug("Movie {} (TMDB) {} in watchlist for user {}",
+                tmdbId, exists ? "is" : "is not", usuarioId);
+
         return ResponseEntity.ok(exists);
     }
 
@@ -101,13 +101,13 @@ public class WatchlistController {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> getWatchlistCount(@RequestParam Long usuarioId) {
-        
+
         log.info("Getting watchlist count for user: {}", usuarioId);
-        
+
         // Obtener todas las películas (página grande) y contar
         Page<UsuarioWatchlistEntity> watchlist = watchlistService.getWatchlistPaginada(usuarioId, 0, Integer.MAX_VALUE);
         Long count = watchlist.getTotalElements();
-        
+
         log.info("User {} has {} movies in watchlist", usuarioId, count);
         return ResponseEntity.ok(count);
     }
