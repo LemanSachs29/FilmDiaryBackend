@@ -19,7 +19,9 @@ server:
 
 # Configuración de TMDB API
 tmdb:
-  api-key: ${TMDB_API_KEY:}
+  api-key: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZWYzMzdiMGVmMDEzNWU4ZWE5YzI4MDAyYjExYTUwYSIsIm5iZiI6MTcxNDA3OTkxNC4yMjIwMDAxLCJzdWIiOiI2NjJhYzhhYWMxZmZiZDAxMWY2YmM4NmEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.rjfLtqCx9IgKIOE4CNrL8N75mKo6B-a1nSeEBTOAkck
+
+  
 
 # Configuración de logging
 logging:
